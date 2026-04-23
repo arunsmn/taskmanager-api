@@ -14,7 +14,7 @@ def create_task(title="Test Task", description="Test Description"):
 def test_root():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "Task Manager API is running"}
+    assert response.json() == {"message": "Task Manager API is running 🚀"}
 
 
 def test_create_task():
