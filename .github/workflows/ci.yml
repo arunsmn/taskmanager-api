@@ -1,0 +1,44 @@
+name: CI Pipeline
+
+# Triggers — when does this run?
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Lint, Test & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out your code onto the GitHub machine
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Install uv (our package manager)
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      # 3. Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # 4. Install dependencies
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      # 5. Lint — if this fails, tests won't even run
+      - name: Lint with Ruff
+        run: uv run ruff check .
+
+      # 6. Test — if this fails, Docker won't build
+      - name: Run tests
+        run: uv run pytest -v
+
+      # 7. Build Docker image — proves it containerizes correctly
+      - name: Build Docker image
+        run: docker build -t taskmanager-api .
