@@ -12,4 +12,4 @@ app.include_router(router)
 
 @app.get("/")
 def root():
-    return {"message": "Task Manager API is running"}
+    return {"message": "Task Manager API is running 🚀"}
